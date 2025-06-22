@@ -3,8 +3,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'Dashboard',
-    component: () => import('@/features/dashboard/views/Dashboard.vue')
+    name: 'Main',
+    component: () => import('@/layouts/Main.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Dashboard',
+        component: () => import('@/features/dashboard/views/Dashboard.vue')
+      },
+    ],
   },
   // Tambahkan route lain di sini
 ]
