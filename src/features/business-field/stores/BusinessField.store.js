@@ -18,13 +18,13 @@ const defaultTableOptions = {
       label: "Kode",
       field: "code",
       class: "",
-      width: "120px",
+      // width: "10px",
     },
     {
       label: "Nama",
       field: "name",
       class: "",
-      width: "200px",
+      // width: "500px",
     },
   ],
   page: 1,
@@ -118,8 +118,22 @@ const BusinessFieldStore = {
           };
         }
 
+        // Tambahkan angka random 1-10 untuk setiap hari di bulan ini pada setiap business_field
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth(); // 0-indexed
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        const businessFieldsWithRandom = (data.business_fields || []).map(field => {
+          const newField = { ...field };
+          for (let day = 1; day <= daysInMonth; day++) {
+            newField[`day_${day}`] = Math.floor(Math.random() * 10) + 1;
+          }
+          return newField;
+        });
+
         context.commit("INSERT_DATA", {
-          business_fields: data.business_fields || [],
+          business_fields: businessFieldsWithRandom,
         });
         context.commit("UPDATE_TOTAL_DATA", {
           business_fields: data.total || 0,
