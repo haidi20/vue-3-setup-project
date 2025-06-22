@@ -21,6 +21,8 @@ const defaultTableOptions = {
 
 const defaultForm = {
   id: null,
+  business_field_id: "",
+  business_field_name: null,
 };
 
 const DashboardStore = {
@@ -119,7 +121,7 @@ const DashboardStore = {
       const { filters, page, per_page } = state.table_option.dashboards;
       const { search } = filters;
 
-      console.info("filters", filters);
+      // console.info("filters", filters);
 
       let dashboards = state.data.dashboards;
 
