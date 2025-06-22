@@ -12,7 +12,9 @@ const defaultTableOptions = {
     sort_by: "desc",
   },
   columns: [
-    //  
+    { label: "Nama", field: "label" },
+    { label: "Nilai", field: "value" },
+    { label: "Aksi", field: "actions", },
   ],
   page: 1,
   per_page: 5,

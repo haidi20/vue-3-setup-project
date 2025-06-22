@@ -1,10 +1,11 @@
+import { useStore } from 'vuex'
+import { ref, computed, watch, onMounted, onUpdated, onUnmounted } from 'vue'
+import { useState, useActions, useMutations, useGetters } from '@/utils/helpers/store_helper'
 
 export function useDashboardData() {
-  const columns = [
-    { label: "Nama", field: "label" },
-    { label: "Nilai", field: "value" },
-    { label: "Aksi", field: "actions", },
-  ];
+  const { columns } = useState('dashboard', {
+    columns: 'table_option.dashboards.columns',
+  });
 
   // Edit data by id
   const onEdit = (index, item) => {

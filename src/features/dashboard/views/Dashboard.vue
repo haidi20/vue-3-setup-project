@@ -28,6 +28,11 @@
         </div>
 
         <div class="mb-4">
+          <h5>jenis usaha:</h5>
+          <BusinessFieldData />
+        </div>
+
+        <div class="mb-4">
           <h5>Ringkasan Dashboard:</h5>
           <DashboardData />
         </div>
@@ -42,6 +47,7 @@ import DashboardCount from "./DashboardCount.vue";
 import DashboardBusinessField from "./DashboardBusinessField.vue";
 import DashboardData from "./DashboardData.vue";
 import useDashboard from "@/features/dashboard/scripts/Dashboard.script.js";
+import BusinessFieldData from "@/features/business-field/views/BusinessFieldData.vue";
 
 const {
   // dashboard
