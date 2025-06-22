@@ -29,21 +29,7 @@
 
         <div class="mb-4">
           <h5>Ringkasan Dashboard:</h5>
-          <ul class="list-group">
-            <li
-              v-if="getDashboards.length === 0"
-              class="list-group-item text-center text-muted"
-            >Tidak ada data</li>
-            <li
-              v-else
-              v-for="(item, index) in getDashboards"
-              :key="index"
-              class="list-group-item d-flex justify-content-between align-items-center"
-            >
-              {{ item.label }}
-              <span class="badge bg-secondary">{{ item.value }}</span>
-            </li>
-          </ul>
+          <DashboardData />
         </div>
       </div>
     </div>
@@ -54,6 +40,7 @@
 import SelectClientSide from "@/components/SelectClientSide.vue";
 import DashboardCount from "./DashboardCount.vue";
 import DashboardBusinessField from "./DashboardBusinessField.vue";
+import DashboardData from "./DashboardData.vue";
 import useDashboard from "@/features/dashboard/scripts/Dashboard.script.js";
 
 const {

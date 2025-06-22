@@ -127,16 +127,17 @@ function fetchData(search = "") {
 }
 
 // === Handle Remote Search ===
-const handleRemote = debounce((query) => {
-  if (query.length >= 2 || query === "") {
+const handleRemote = debounce((search) => {
+  console.info("handleRemote search:", search);
+  if (search.length) {
     isLoading.value = true;
-    fetchData(query)
+    fetchData(search)
       .catch((err) => console.error("Error saat fetch data:", err))
       .finally(() => {
         isLoading.value = false;
       });
   }
-}, 300);
+}, 500);
 
 // === Get Option Label ===
 function getOption(option) {

@@ -33,6 +33,11 @@ const DashboardStore = {
         ...dashboardJson,
       ],
     },
+    selected: {
+      dashboards: [
+        ...dashboardJson,
+      ],
+    },
     total_data: {
       dashboards: 2,
     },
