@@ -8,5 +8,13 @@ export default function useBusinessField() {
     columns: 'table_options.business_fields.columns',
   });
 
+  const { fetchSelectBusinessFields } = useActions('businessField', {
+    fetchSelectBusinessFields: 'fetchSelectBusinessFields',
+  });
+
+  onMounted(() => {
+    fetchSelectBusinessFields();
+  });
+
   return { columns, filters };
 }

@@ -3,7 +3,7 @@
     <div class="card shadow-sm p-4 mb-5 bg-body rounded">
       <h1 class="card-title text-center mb-4">Dasboard Inventaris</h1>
 
-      <div class="card-body text-center">
+      <div class="card-body">
         <DashboardCount />
         <br />
 

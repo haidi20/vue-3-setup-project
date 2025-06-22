@@ -3,13 +3,7 @@
     <!-- 🔍 Search Box -->
     <div class="row align-items-end">
       <div :class="colSearchClass">
-        <input
-          v-model="search"
-          type="text"
-          class="form-control"
-          placeholder="Cari..."
-          @input="onSearch"
-        />
+        <input v-model="search" type="text" class="form-control" placeholder="Cari..." />
       </div>
 
       <!-- 🧩 Slot untuk filter tambahan -->
@@ -56,7 +50,7 @@
           <tr v-else-if="data.length === 0">
             <td :colspan="countColumn" class="text-center">Tidak ada data</td>
           </tr>
-          <slot v-else name="tbody" :data="data" :current_page="current_page" />
+          <slot v-else name="tbody" :data="data" />
         </tbody>
 
         <!-- 📇 Footer -->
@@ -78,12 +72,20 @@
           </li>
 
           <li
-            v-for="page in pages"
-            :key="page"
+            v-for="(page, index) in visiblePages"
+            :key="index"
             class="page-item"
-            :class="{ active: current_page === page }"
+            :class="{
+              active: current_page === page,
+              disabled: page === '...',
+            }"
           >
-            <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+            <a
+              class="page-link"
+              href="#"
+              @click.prevent="page !== '...' ? changePage(page) : null"
+              :style="{ cursor: page === '...' ? 'default' : 'pointer' }"
+            >{{ page }}</a>
           </li>
 
           <li class="page-item" :class="{ disabled: current_page === totalPages }">
@@ -151,19 +153,15 @@ const props = defineProps({
   },
   searchTime: {
     type: Number,
-    default: 1000, // waktu debounce untuk pencarian
+    default: 1000,
   },
 });
-
-// === State ===
-const search = ref("");
-const current_page = ref(1);
-const countColumn = ref(0);
 
 // === Store ===
 const store = useStore();
 
 // === Computed Properties ===
+
 const colSearchClass = computed(() => {
   return `col-md-${props.colSearch}`;
 });
@@ -173,15 +171,59 @@ const loadingTable = computed(() => {
 });
 
 const data = computed(() => {
-  return store.state[props.nameStore]?.data[props.nameData] || [];
+  return store.state[props.nameStore]?.data?.[props.nameData] || [];
 });
 
 const totalItems = computed(() => {
-  return store.state[props.nameStore]?.total || 0;
+  return store.state[props.nameStore]?.total_data[props.nameData] || 0;
 });
 
 const totalPages = computed(() => {
-  return Math.ceil(totalItems.value / props.perPage);
+  return Math.ceil(totalItems.value / perPage.value);
+});
+
+const countColumn = computed(() => {
+  return props.columns.filter((col) => col.field !== null).length;
+});
+
+const filters = computed(() => {
+  return (
+    store.state[props.nameStore]?.table_options[props.nameData]?.filters || {}
+  );
+});
+
+const search = computed({
+  get: () =>
+    store.state[props.nameStore]?.table_options[props.nameData]?.filters
+      ?.search || "",
+  set: (val) =>
+    store.commit(`${props.nameStore}/UPDATE_FILTERS`, {
+      filter: {
+        search: val,
+        page: 1,
+        offset: 0,
+      },
+    }),
+});
+
+const current_page = computed({
+  get: () =>
+    store.state[props.nameStore]?.table_options[props.nameData]?.filters
+      ?.page || 1,
+  set: (val) =>
+    store.commit(`${props.nameStore}/UPDATE_FILTERS`, {
+      filter: { page: val },
+    }),
+});
+
+const perPage = computed({
+  get: () =>
+    store.state[props.nameStore]?.table_options[props.nameData]?.filters
+      ?.limit || props.perPage,
+  set: (val) =>
+    store.commit(`${props.nameStore}/UPDATE_FILTERS`, {
+      filter: { limit: val },
+    }),
 });
 
 const pages = computed(() => {
@@ -192,57 +234,120 @@ const pages = computed(() => {
   return result;
 });
 
-// === Watchers ===
-watch(
-  () => props.columns,
-  () => {
-    countColumn.value = props.columns.filter(
-      (col) => col.field !== null
-    ).length;
-  },
-  { immediate: true }
-);
+const visiblePages = computed(() => {
+  const maxVisiblePages = 5; // Jumlah maksimal nomor halaman yang ditampilkan
+  const currentPage = current_page.value;
+  const totalPagesVal = totalPages.value;
 
-// Watch untuk search dan current_page
-watch(
-  () => [search.value, current_page.value],
-  () => {
-    // Hanya debounce untuk pencarian
-    if (search.value) {
-      fetchDataDebounced();
-    } else {
-      fetchData(); // tanpa debounce jika kosong
-    }
+  if (totalPagesVal <= maxVisiblePages) {
+    // Jika total halaman kurang dari atau sama dengan maxVisiblePages, tampilkan semua
+    return Array.from({ length: totalPagesVal }, (_, i) => i + 1);
   }
-);
 
-onMounted(() => {
-  countColumn.value = props.columns.filter((col) => col.field !== null).length;
-  fetchData();
+  const half = Math.floor(maxVisiblePages / 2);
+
+  let start = currentPage - half;
+  let end = currentPage + half;
+
+  if (start <= 1) {
+    start = 1;
+    end = maxVisiblePages;
+  }
+
+  if (end > totalPagesVal) {
+    end = totalPagesVal;
+    start = totalPagesVal - maxVisiblePages + 1;
+  }
+
+  const pagesArray = [];
+
+  for (let i = start; i <= end; i++) {
+    pagesArray.push(i);
+  }
+
+  // Tambahkan ellipsis jika diperlukan
+  if (start > 1) {
+    pagesArray.unshift("...");
+  }
+
+  if (end < totalPagesVal) {
+    pagesArray.push("...");
+  }
+
+  // Selalu tambahkan halaman pertama dan terakhir jika tidak termasuk dalam array
+  if (!pagesArray.includes(1)) {
+    pagesArray.unshift(1);
+  }
+
+  if (!pagesArray.includes(totalPagesVal)) {
+    pagesArray.push(totalPagesVal);
+  }
+
+  return pagesArray;
 });
 
-// Fungsi fetchData dengan debounce
+// === Debounced Fetch Function ===
 const fetchDataDebounced = debounce(() => {
   fetchData();
 }, props.searchTime);
 
-// === Methods ===
 const fetchData = () => {
   store.dispatch(`${props.nameStore}/${props.nameAction}`, {
-    search: search.value,
-    page: current_page.value,
-    limit: props.perPage,
+    ...filters.value,
   });
 };
 
-const onSearch = debounce(() => {
-  current_page.value = 1;
-}, props.searchTime);
+// === Watchers ===
+watch(
+  () => [filters.value.search, filters.value.page, filters.value.limit],
+  () => {
+    if (filters.value.search) {
+      fetchDataDebounced();
+    } else {
+      fetchData();
+    }
+  }
+);
 
+// === Methods ===
 const changePage = (page) => {
+  // console.info("changePage", {
+  //   page,
+  //   totalPages: totalPages.value,
+  //   current_page: current_page.value,
+  //   filters: filters.value,
+  // });
+
   if (page < 1 || page > totalPages.value) return;
-  current_page.value = page;
+
+  const newOffset = (page - 1) * perPage.value;
+
+  store.commit(`${props.nameStore}/UPDATE_FILTERS`, {
+    filter: {
+      page,
+      offset: newOffset,
+    },
+  });
 };
+
+// === Lifecycle Hook ===
+onMounted(() => {
+  // Set default jika belum ada
+  if (!filters.value.limit) {
+    perPage.value = props.perPage;
+  }
+
+  if (!filters.value.order_by) {
+    store.commit(`${props.nameStore}/UPDATE_FILTERS`, {
+      filter: {
+        order_by: "created_at",
+        sort_by: "desc",
+      },
+    });
+  }
+
+  fetchData();
+});
 </script>
 
 <style scoped>

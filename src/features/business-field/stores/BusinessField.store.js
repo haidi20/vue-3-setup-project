@@ -75,6 +75,13 @@ const BusinessFieldStore = {
       // console.info("payload total_data:", payload);
       Object.assign(state.total_data, payload);
     },
+    UPDATE_FILTERS(state, { filter }) {
+      // console.info("payload filter:", filter);
+      state.table_options.business_fields.filters = {
+        ...state.table_options.business_fields.filters,
+        ...filter,
+      };
+    },
     UPDATE_SELECT(state, payload) {
       // console.info("payload business_fields:", payload);
       Object.assign(state.select, payload);
@@ -92,10 +99,10 @@ const BusinessFieldStore = {
       try {
         context.commit("UPDATE_LOADING", { data_business_fields: true });
         const search = payload?.search;
-        const filters = payload || context.state.table_options.business_fields.filters;
+        const filters = context.state.table_options.business_fields.filters;
 
-        console.info("fetchBusinessFields", search, filters);
-        const response = await axiosCustom.get("/master/business-fields", {
+        // console.info("fetchBusinessFields", search, filters);
+        const response = await axiosCustom.get("/business-fields", {
           params: filters,
         });
 
