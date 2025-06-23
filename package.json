@@ -1,0 +1,33 @@
+{
+  "name": "inventory-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "watch:inter": "vite --mode inter --port 3001 --host",
+    "watch:dist": "vite preview --mode inter --port 3001 --host",
+    "watch:dev": "vite --mode dev --port 3001 --host",
+    "watch:prod": "vite --mode prod --port 3001 --host",
+    "build:inter": "vite build --mode inter",
+    "build:dev": "vite build --mode dev",
+    "build:prod": "vite build --mode prod",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vueuse/core": "^13.4.0",
+    "axios": "^1.10.0",
+    "bootstrap": "5.3.3",
+    "element-plus": "^2.10.2",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "sweetalert2": "^11.22.0",
+    "vue": "^3.5.13",
+    "vue-router": "4",
+    "vue-select": "^3.20.4",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "vite": "^6.3.5"
+  }
+}

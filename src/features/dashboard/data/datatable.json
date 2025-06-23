@@ -1,0 +1,42 @@
+[
+  {
+    "label": "Total Products",
+    "value": 1500
+  },
+  {
+    "label": "Products In Stock",
+    "value": 1200
+  },
+  {
+    "label": "Products Out of Stock",
+    "value": 300
+  },
+  {
+    "label": "Total Categories",
+    "value": 25
+  },
+  {
+    "label": "Total Suppliers",
+    "value": 12
+  },
+  {
+    "label": "Pending Orders",
+    "value": 45
+  },
+  {
+    "label": "Completed Orders",
+    "value": 980
+  },
+  {
+    "label": "Returned Items",
+    "value": 18
+  },
+  {
+    "label": "Low Stock Alerts",
+    "value": 7
+  },
+  {
+    "label": "Total Inventory Value",
+    "value": 250000
+  }
+]
