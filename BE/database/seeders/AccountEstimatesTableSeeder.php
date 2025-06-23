@@ -48,30 +48,6 @@ class AccountEstimatesTableSeeder extends Seeder
         }
 
         $data = [
-            // Aset - Kas & Bank
-            [
-                'name' => 'Kas',
-                'description' => 'Saldo kas perusahaan',
-                'normal_balance' => 'debit',
-                'account_type_id' => $kasBankId,
-                'account_category_id' => $asetId,
-            ],
-            [
-                'name' => 'Bank BCA',
-                'description' => 'Rekening Bank BCA',
-                'normal_balance' => 'debit',
-                'account_type_id' => $kasBankId,
-                'account_category_id' => $asetId,
-            ],
-
-            // Aset - Piutang Usaha
-            [
-                'name' => 'Piutang Usaha',
-                'description' => 'Piutang pelanggan',
-                'normal_balance' => 'debit',
-                'account_type_id' => $piutangUsahaId,
-                'account_category_id' => $asetId,
-            ],
 
             // Aset - Persediaan
             [
@@ -86,22 +62,6 @@ class AccountEstimatesTableSeeder extends Seeder
                 'description' => 'Minyak goreng stok awal',
                 'normal_balance' => 'debit',
                 'account_type_id' => $persediaanId,
-                'account_category_id' => $asetId,
-            ],
-
-            // Aset - Aset Tetap
-            [
-                'name' => 'Mobil Operasional',
-                'description' => 'Mobil untuk distribusi makanan',
-                'normal_balance' => 'debit',
-                'account_type_id' => $asetTetapId,
-                'account_category_id' => $asetId,
-            ],
-            [
-                'name' => 'Meja & Kursi',
-                'description' => 'Furniture tempat usaha',
-                'normal_balance' => 'debit',
-                'account_type_id' => $asetTetapId,
                 'account_category_id' => $asetId,
             ],
 
@@ -152,13 +112,6 @@ class AccountEstimatesTableSeeder extends Seeder
                 'account_type_id' => $pendapatanAkunId,
                 'account_category_id' => $pendapatanId,
             ],
-            [
-                'name' => 'Pendapatan Lainnya',
-                'description' => 'Pendapatan non-operasional seperti jasa eksternal',
-                'normal_balance' => 'credit',
-                'account_type_id' => $pendapatanLainnyaId,
-                'account_category_id' => $pendapatanId,
-            ],
 
             // Beban
             [
@@ -171,13 +124,6 @@ class AccountEstimatesTableSeeder extends Seeder
             [
                 'name' => 'Beban Listrik',
                 'description' => 'Biaya listrik bulanan',
-                'normal_balance' => 'debit',
-                'account_type_id' => $bebanOperasionalId,
-                'account_category_id' => $bebanId,
-            ],
-            [
-                'name' => 'Beban Iklan',
-                'description' => 'Biaya promosi di media sosial',
                 'normal_balance' => 'debit',
                 'account_type_id' => $bebanOperasionalId,
                 'account_category_id' => $bebanId,

@@ -13,19 +13,21 @@ return new class extends Migration
     {
         Schema::create('account_estimates', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('account_category_id'); // ID estimasi akun
+            $table->unsignedBigInteger('account_type_id'); // ID jenis akun
+
             $table->string('name');
             $table->text('description')->nullable();
-
             // Saldo Normal (Debit/Kredit)
             $table->enum('normal_balance', ['debit', 'credit'])->default('debit');
 
-            // Relasi ke tabel account_categories
-            $table->foreignId('account_category_id')->constrained('account_categories')->onDelete('restrict');
-            // Relasi ke tabel account_types
-            $table->foreignId('account_type_id')->constrained('account_types')->onDelete('restrict');
-
             $table->timestamps();
             $table->softDeletes();
+
+            // Relasi ke tabel account_categories
+            $table->foreign('account_category_id')->references('id')->on('account_categories')->onDelete('restrict');
+            // Relasi ke tabel account_types
+            $table->foreign('account_type_id')->references('id')->on('account_types')->onDelete('restrict');
 
             // Indeks untuk performa query
             $table->index('account_category_id');

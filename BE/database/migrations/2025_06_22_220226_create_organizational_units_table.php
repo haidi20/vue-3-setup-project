@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->uuid('parent_id')->nullable()->index();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

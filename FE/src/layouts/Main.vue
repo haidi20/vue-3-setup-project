@@ -1,121 +1,102 @@
 <template>
-  <div>
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="d-flex flex-column min-vh-100">
+    <!-- Navbar (Topbar) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <button class="btn btn-outline-secondary d-lg-none me-2" @click="toggleSidebar">☰</button>
-        <span class="navbar-brand">Aplikasi Akunting</span>
+        <a class="navbar-brand" href="#">Inventory</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#sidebarMenu"
+          aria-controls="sidebarMenu"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <span class="navbar-text d-none d-lg-block ms-auto">Aplikasi Akunting</span>
       </div>
     </nav>
 
-    <!-- Sidebar -->
-    <div :class="['sidebar', { show: isSidebarOpen }]">
-      <ul class="nav flex-column">
-        <li v-for="item in sidebarMenu" :key="item.title" class="nav-item">
-          <!-- Menu dengan anak -->
-          <template v-if="item.children && item.children.length">
-            <a
-              class="nav-link"
-              data-bs-toggle="collapse"
-              :href="`#collapse${item.title}`"
-              role="button"
-              aria-expanded="false"
-              :aria-controls="'collapse' + item.title"
-            >
-              {{ item.title }}
-              <span class="float-end">&#9660;</span>
-            </a>
-            <ul class="collapse list-unstyled ps-3" :id="`collapse${item.title}`">
-              <li v-for="child in item.children" :key="child.title" class="nav-item">
+    <div class="container-fluid flex-grow-1">
+      <div class="row flex-nowrap">
+        <!-- Sidebar -->
+        <nav id="sidebarMenu" class="col-12 col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <li v-for="item in sidebarMenu" :key="item.title" class="nav-item">
                 <router-link
-                  :to="{ name: child.url.name }"
-                  class="nav-link"
+                  :to="{ name: item.url.name }"
+                  class="nav-link d-flex align-items-center text-white"
+                  :class="{ active: isActive(item.url.name) }"
                   @click="closeSidebarOnMobile"
-                >{{ child.title }}</router-link>
+                >
+                  <i v-if="item.icon" :class="item.icon"></i>
+                  <span class="ms-2">{{ item.title }}</span>
+                </router-link>
               </li>
             </ul>
-          </template>
+          </div>
+        </nav>
 
-          <!-- Menu tanpa anak -->
-          <template v-else>
-            <router-link
-              :to="{ name: item.url.name }"
-              class="nav-link"
-              @click="closeSidebarOnMobile"
-            >{{ item.title }}</router-link>
-          </template>
-        </li>
-      </ul>
+        <!-- Main Content -->
+        <main class="col px-0 flex-grow-1">
+          <div class="pt-3 px-3">
+            <router-view />
+          </div>
+          <Footer />
+        </main>
+      </div>
     </div>
-
-    <!-- Main Content -->
-    <div class="content container mt-4 ms-lg-10 ps-lg-5 pt-4">
-      <router-view />
-    </div>
-
-    <!-- Footer -->
-    <Footer />
   </div>
 </template>
 
 <script setup>
 import Footer from "@/layouts/Footer.vue";
-import { ref } from "vue";
+import { useRoute } from "vue-router";
 
-const isSidebarOpen = ref(false);
+const route = useRoute();
+
 const sidebarMenu = [
   {
     title: "Dashboard",
     url: { name: "Dashboard" },
+    icon: "bi bi-speedometer2",
   },
-  // {
-  //   title: "Products",
-  //   children: [
-  //     { title: "List", url: { name: "ProductsList" } },
-  //     { title: "Add New", url: { name: "ProductsAdd" } },
-  //   ],
-  // },
   {
     title: "Jenis Usaha",
     url: { name: "BusinessField" },
+    icon: "bi bi-briefcase",
   },
 ];
 
-function toggleSidebar() {
-  isSidebarOpen.value = !isSidebarOpen.value;
+function isActive(name) {
+  return route.name === name;
 }
 
 function closeSidebarOnMobile() {
-  if (window.innerWidth < 992) {
-    isSidebarOpen.value = false;
+  // Optionally close sidebar on mobile after click
+  const sidebar = document.getElementById("sidebarMenu");
+  if (
+    window.innerWidth < 992 &&
+    sidebar &&
+    sidebar.classList.contains("show")
+  ) {
+    // Bootstrap collapse
+    const collapse = bootstrap.Collapse.getInstance(sidebar);
+    if (collapse) collapse.hide();
   }
 }
 </script>
 
 <style scoped>
 .sidebar {
-  position: fixed;
-  top: 56px;
-  left: 0;
-  width: 220px;
-  height: 100%;
-  background: #f8f9fa;
-  border-right: 1px solid #dee2e6;
-  padding-top: 1rem;
-  transition: transform 0.3s ease;
-  transform: translateX(-100%);
-  z-index: 1040;
+  min-height: 100vh;
 }
-.sidebar.show {
-  transform: translateX(0);
-}
-@media (min-width: 992px) {
-  .sidebar {
-    transform: translateX(0);
-    left: 0;
-  }
-  .content {
-    margin-left: 220px;
-  }
+.nav-link.active,
+.nav-link:hover {
+  background: #495057;
+  color: #fff !important;
 }
 </style>
