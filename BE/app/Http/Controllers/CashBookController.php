@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CashBookResource;
 use App\Models\CashBook;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CashBookController extends Controller
 {
@@ -14,17 +15,17 @@ class CashBookController extends Controller
      */
     public function index()
     {
-        // Ambil data dengan pagination
         $cashBooks = CashBook::with([
             'accountEstimate',
             'fundingSource',
             'paymentType',
             'organizationalUnit'
-        ])->orderBy('transaction_date', 'asc')->paginate(5);
+        ])
+            ->orderBy('transaction_date', 'asc')
+            ->paginate(5);
 
-        // Kirim ke Vue via Inertia
-        return inertia('CashBook', [
-            'data' => $cashBooks
+        return Inertia::render('CashBook', [
+            'cash_books' => CashBookResource::collection($cashBooks),
         ]);
     }
 }

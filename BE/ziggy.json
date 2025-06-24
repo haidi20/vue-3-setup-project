@@ -1,0 +1,9 @@
+{
+    "group": "api",
+    "prefix": "",
+    "domain": "",
+    "namespace": "App\\Http\\Controllers",
+    "js_namespace": "Ziggy",
+    "js_var": "route",
+    "output_file": "resources/js/ziggy.js"
+}

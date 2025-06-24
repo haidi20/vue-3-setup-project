@@ -25,6 +25,7 @@
         "phpoffice/phpspreadsheet": "^1.29",
         "spatie/laravel-honeypot": "^4.6",
         "spatie/laravel-permission": "^6.17",
+        "tightenco/ziggy": "^2.5",
         "unisharp/laravel-filemanager": "^2.10",
         "yajra/laravel-datatables-oracle": "^12.0"
     },

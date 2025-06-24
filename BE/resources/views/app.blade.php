@@ -46,7 +46,7 @@
             padding: 1.5rem;
         }
     </style>
-    @vite('resources/js/app.js')
+    <script src="{{ asset('js/ziggy.js') }}"></script>
 </head>
 
 <body>
@@ -54,6 +54,7 @@
     <div class="flex-grow-1 d-flex flex-column">
         @inertia
     </div>
+    @vite('resources/js/app.js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
