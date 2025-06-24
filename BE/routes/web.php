@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::namespace('App\Http\Controllers')->group(function () {
     Route::get('/', 'DashboardController@index')->name('dashboard');

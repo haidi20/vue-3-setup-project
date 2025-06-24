@@ -14,7 +14,7 @@ return new class extends Migration
         //unit organisasi
         Schema::create('organizational_units', function (Blueprint $table) {
             $table->id();
-            $table->string('unit_name');
+            $table->string('name');
             $table->text('description')->nullable();
             $table->uuid('parent_id')->nullable()->index();
             $table->timestamps();

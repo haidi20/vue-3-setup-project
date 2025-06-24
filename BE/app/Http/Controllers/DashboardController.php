@@ -13,6 +13,7 @@ use App\Models\TransactionType;
 use App\Models\PaymentType;
 use App\Models\OrganizationalUnit;
 use App\Models\CashBook;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -36,6 +37,11 @@ class DashboardController extends Controller
             ['label' => 'Pembukuan Kas', 'value' => CashBook::count()],
         ];
 
-        return view('dashboard.index', compact('dataCounts'));
+        // return $dataCounts;
+
+        return Inertia::render('Dashboard', [
+            'dataCounts' => $dataCounts,
+        ]);
+        // return view('dashboard.index', compact('dataCounts'));
     }
 }

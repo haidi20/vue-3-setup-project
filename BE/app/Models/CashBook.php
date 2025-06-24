@@ -5,10 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\AccountEstimate;
-use App\Models\FundingSource;
-use App\Models\PaymentType;
-use App\Models\OrganizationalUnit;
 
 class CashBook extends Model
 {
@@ -26,16 +22,34 @@ class CashBook extends Model
         'description',
         'type',
         'amount',
-        'reference'
+        'status',
+        'reference',
+        'created_by',
+        'updated_by',
+        'deleted_by'
     ];
 
     protected $casts = [
         'transaction_date' => 'date',
     ];
 
-    // Accessor Saldo (Dinamis)
-    protected $appends = ['balance'];
+    protected $appends = [
+        'balance',
+        'transaction_date_readable',
+        'account_estimate_name',
+        'funding_source_name',
+        'payment_type_name',
+        'organizational_unit_name',
+        'debit',
+        'credit',
+        'created_at_readable',
+        'transaction_date_readable',
+        'debit_readable',
+        'credit_readable',
+        'balance_readable',
+    ];
 
+    // Relasi tetap sama
     public function accountEstimate()
     {
         return $this->belongsTo(AccountEstimate::class);
@@ -56,6 +70,38 @@ class CashBook extends Model
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
+    // Accessor lainnya juga tetap sama...
+
+    public function getAccountEstimateNameAttribute()
+    {
+        return $this->accountEstimate->name ?? '-';
+    }
+
+    public function getFundingSourceNameAttribute()
+    {
+        return $this->fundingSource->name ?? '-';
+    }
+
+    public function getPaymentTypeNameAttribute()
+    {
+        return $this->paymentType->name ?? '-';
+    }
+
+    public function getOrganizationalUnitNameAttribute()
+    {
+        return $this->organizationalUnit->name ?? '-';
+    }
+
+    public function getDebitAttribute()
+    {
+        return $this->type === 'in' ? $this->amount : 0;
+    }
+
+    public function getCreditAttribute()
+    {
+        return $this->type === 'out' ? $this->amount : 0;
+    }
+
     public function getBalanceAttribute()
     {
         $prevTransactions = self::where('id', '<', $this->id)->orderBy('id')->get();
@@ -70,14 +116,28 @@ class CashBook extends Model
         return $saldo;
     }
 
-    // Scope
-    public function scopeIn($query)
+    public function getCreatedAtReadableAttribute()
     {
-        return $query->where('type', 'in');
+        return $this->created_at ? $this->created_at->translatedFormat('l, d F Y') : '';
     }
 
-    public function scopeOut($query)
+    public function getTransactionDateReadableAttribute()
     {
-        return $query->where('type', 'out');
+        return $this->transaction_date ? $this->transaction_date->translatedFormat('l, d F Y') : '';
+    }
+
+    public function getDebitReadableAttribute()
+    {
+        return $this->debit ? number_format($this->debit, 0, ',', '.') : '';
+    }
+
+    public function getCreditReadableAttribute()
+    {
+        return $this->credit ? number_format($this->credit, 0, ',', '.') : '';
+    }
+
+    public function getBalanceReadableAttribute()
+    {
+        return $this->balance ? number_format($this->balance, 0, ',', '.') : '';
     }
 }

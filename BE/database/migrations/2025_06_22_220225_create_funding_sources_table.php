@@ -14,7 +14,7 @@ return new class extends Migration
         // sumber dana
         Schema::create('funding_sources', function (Blueprint $table) {
             $table->id();
-            $table->string('source_name');
+            $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();

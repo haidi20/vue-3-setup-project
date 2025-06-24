@@ -11,11 +11,13 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
+        "inertiajs/inertia-laravel": "^2.0",
         "intervention/image": "^3.11",
         "laravel/framework": "^12.0",
+        "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
-        "maatwebsite/excel": "^3.1.64",
+        "maatwebsite/excel": "^3.1",
         "matomo/device-detector": "^6.4",
         "owen-it/laravel-auditing": "^14.0",
         "php-flasher/flasher-laravel": "^2.1",
@@ -83,6 +85,9 @@
     },
     "extra": {
         "laravel": {
+            "providers": [
+                "Inertia\\InertiaServiceProvider"
+            ],
             "dont-discover": []
         }
     },
