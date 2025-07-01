@@ -69,6 +69,11 @@ const sidebarMenu = [
     url: { name: "BusinessField" },
     icon: "bi bi-briefcase",
   },
+  {
+    title: "Pengguna",
+    url: { name: "User" },
+    icon: "bi bi-person",
+  },
 ];
 
 function isActive(name) {

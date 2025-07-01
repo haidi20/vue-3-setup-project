@@ -18,6 +18,12 @@ const routes = [
         component: () => import('@/features/business-field/views/BusinessFieldData.vue')
       },
       {
+        path: 'user',
+        name: 'User',
+        // D:\learns\inventory-app\FE\src\features\business-field\views\BusinessFieldData.vue
+        component: () => import('@/features/user/views/User.vue')
+      },
+      {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('@/features/errors/views/NotFound.vue')
